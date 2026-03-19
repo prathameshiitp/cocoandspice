@@ -883,6 +883,7 @@
 
     mockOrderBtn.addEventListener("click", () => {
       const key = orderStatusKeys[orderStepIndex];
+      orderStatus.dataset.i18n = key;
       orderStatus.textContent = translations[currentLanguage][key];
       orderStepIndex = (orderStepIndex + 1) % orderStatusKeys.length;
     });
