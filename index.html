@@ -105,12 +105,25 @@
     }
 
     .brand {
+      display: flex;
+      align-items: center;
       font-family: "Cormorant Garamond", serif;
       font-weight: 700;
       letter-spacing: 0.5px;
       font-size: clamp(1.6rem, 2.6vw, 2rem);
       color: var(--deep-spice);
       white-space: nowrap;
+    }
+
+    .brand-logo {
+      height: 52px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .brand-logo[hidden] {
+      display: none;
     }
 
     .nav-toggle {
@@ -325,6 +338,22 @@
 
     .image-panel:hover img {
       transform: scale(1.06);
+    }
+
+    .full-menu-panel {
+      margin-top: 40px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-strong);
+      border: 1px solid rgba(140, 63, 28, 0.1);
+      background: var(--white);
+      text-align: center;
+    }
+
+    .full-menu-panel img {
+      width: 100%;
+      height: auto;
+      display: block;
     }
 
     .menu-grid {
@@ -587,7 +616,21 @@
 <body>
   <header class="site-header">
     <div class="container header-wrap">
-      <a href="#home" class="brand">Coco & Spice</a>
+      <a href="#home" class="brand" aria-label="Coco &amp; Spice – Home">
+        <img
+          id="logoGlobal"
+          class="brand-logo"
+          src="https://github.com/user-attachments/assets/01ea6417-0b26-4acd-94f9-cd39a660447d"
+          alt="Coco &amp; Spice"
+        >
+        <img
+          id="logoChina"
+          class="brand-logo"
+          src="https://github.com/user-attachments/assets/412309b4-a43e-4145-b901-0d264e532f50"
+          alt="可可香料"
+          hidden
+        >
+      </a>
       <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu"></button>
       <nav class="main-nav" id="mainNav">
         <a href="#about" data-i18n="navAbout">About</a>
@@ -675,6 +718,13 @@
             </div>
           </article>
         </div>
+        <div class="full-menu-panel">
+          <img
+            src="https://github.com/user-attachments/assets/42e2b4a8-4baf-473d-9f73-6ea871049c56"
+            alt="Coco &amp; Spice full menu – signature Goan dishes including Chicken Cafreal, Seafood Xacuti, Bebinca, and Solkadi"
+            data-i18n-alt="menuImgAlt"
+          >
+        </div>
       </div>
     </section>
 
@@ -749,6 +799,8 @@
     const mainNav = document.getElementById("mainNav");
     const mockOrderBtn = document.getElementById("mockOrderBtn");
     const orderStatus = document.getElementById("orderStatus");
+    const logoGlobal = document.getElementById("logoGlobal");
+    const logoChina = document.getElementById("logoChina");
 
     const orderStatusKeys = [
       "orderStatus1",
@@ -778,6 +830,7 @@
         feature3: "Spice Layered",
         menuTitle: "Signature Menu",
         menuLead: "Classic Goan favorites curated for a modern China launch.",
+        menuImgAlt: "Coco & Spice full menu – signature Goan dishes including Chicken Cafreal, Seafood Xacuti, Bebinca, and Solkadi",
         dish1Title: "Chicken Cafreal",
         dish1Desc: "Char-grilled chicken in a vibrant green herb and spice marinade.",
         dish2Title: "Seafood Xacuti",
@@ -826,6 +879,7 @@
         feature3: "香料有层次",
         menuTitle: "招牌菜单",
         menuLead: "经典果阿菜式，专为中国市场焕新呈现。",
+        menuImgAlt: "可可香料完整菜单 – 招牌果阿菜式，包括香草咖喱烤鸡、海鲜沙库蒂、贝宾卡和索尔卡迪",
         dish1Title: "香草咖喱烤鸡",
         dish1Desc: "以绿色香草与香料腌制后炭烤，风味清新而浓郁。",
         dish2Title: "海鲜沙库蒂",
@@ -868,6 +922,19 @@
           item.textContent = translations[language][key];
         }
       });
+
+      // Update menu image alt text
+      document.querySelectorAll("[data-i18n-alt]").forEach((img) => {
+        const key = img.dataset.i18nAlt;
+        if (translations[language][key]) {
+          img.alt = translations[language][key];
+        }
+      });
+
+      // Swap logo between global and China version
+      const isChinese = language === "zh";
+      logoGlobal.hidden = isChinese;
+      logoChina.hidden = !isChinese;
 
       document.title = language === "en"
         ? "Coco & Spice | Island Flavors, Global Taste"
